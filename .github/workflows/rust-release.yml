@@ -621,7 +621,13 @@ jobs:
             exit 1
           fi
 
-          for tarball in "${tarballs[@]}"; do
+          mapfile -t publish_tarballs < <(
+            python3 .github/scripts/order_npm_release_tarballs.py \
+              --version "${VERSION}" \
+              "${tarballs[@]}"
+          )
+
+          for tarball in "${publish_tarballs[@]}"; do
             filename="$(basename "${tarball}")"
             tag=""
 
